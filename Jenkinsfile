@@ -50,13 +50,13 @@ pipeline {
                             // Update deployment.yaml image tag
                             sh "sed -i 's|image: .*|image: ${DOCKERHUB_USER}/${IMAGE_NAME}:${COMMIT_SHA}|g' deployment.yaml"
                             
-                            // Commit and push changes back to my-app-gitops
-                            sh '''
+                            // Commit and push changes back using double quotes for variable expansion
+                            sh """
                                 git config user.name "jenkins-bot"
                                 git config user.email "jenkins@example.com"
                                 git commit -am "chore: update image tag to ${COMMIT_SHA} [jenkins]"
-                                git push origin main
-                            '''
+                                git push https://${GITHUB_PAT}@${GITOPS_REPO} main
+                            """
                         }
                     }
                 }
